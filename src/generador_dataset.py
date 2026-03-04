@@ -38,38 +38,52 @@ def main():
 
     print(f"Se encontraron {len(image_files)} imágenes en total.")
 
+    errores = 0
     for img_path in tqdm(image_files, desc="Procesando imágenes"):
-        # Nombre base sin extensión
-        base_name = os.path.splitext(os.path.basename(img_path))[0]
-        # Abrir imagen
-        image = Image.open(img_path).convert("RGB")
-        width, height = image.size
+        try:
+            # Nombre base sin extensión
+            base_name = os.path.splitext(os.path.basename(img_path))[0]
+            # Abrir imagen (intentamos con manejo de truncados)
+            try:
+                image = Image.open(img_path).convert("RGB")
+            except Exception as e:
+                print(f"\nError al abrir {img_path}: {e}. Se omite.")
+                errores += 1
+                continue
 
-        # Inferencia
-        inputs = processor(text=args.prompts, images=image, return_tensors="pt")
-        with torch.no_grad():
-            outputs = model(**inputs)
+            width, height = image.size
 
-        target_sizes = torch.tensor([[height, width]])
-        results = processor.post_process_object_detection(
-            outputs=outputs, target_sizes=target_sizes, threshold=args.threshold
-        )[0]
+            # Inferencia
+            inputs = processor(text=args.prompts, images=image, return_tensors="pt")
+            with torch.no_grad():
+                outputs = model(**inputs)
 
-        # Guardar etiquetas en formato YOLO
-        label_file = os.path.join(args.output_dir, "labels", base_name + ".txt")
-        with open(label_file, 'w') as f:
-            for box, score, label_id in zip(results["boxes"], results["scores"], results["labels"]):
-                class_id = label_id.item()
-                x1, y1, x2, y2 = box.tolist()
-                x_center = (x1 + x2) / 2 / width
-                y_center = (y1 + y2) / 2 / height
-                w = (x2 - x1) / width
-                h = (y2 - y1) / height
-                f.write(f"{class_id} {x_center:.6f} {y_center:.6f} {w:.6f} {h:.6f}\n")
+            target_sizes = torch.tensor([[height, width]])
+            results = processor.post_process_grounded_object_detection(
+                outputs=outputs, target_sizes=target_sizes, threshold=args.threshold
+            )[0]
 
-        # Copiar imagen a la carpeta de salida
-        image.save(os.path.join(args.output_dir, "images", os.path.basename(img_path)))
+            # Guardar etiquetas en formato YOLO
+            label_file = os.path.join(args.output_dir, "labels", base_name + ".txt")
+            with open(label_file, 'w') as f:
+                for box, score, label_id in zip(results["boxes"], results["scores"], results["labels"]):
+                    class_id = label_id.item()
+                    x1, y1, x2, y2 = box.tolist()
+                    x_center = (x1 + x2) / 2 / width
+                    y_center = (y1 + y2) / 2 / height
+                    w = (x2 - x1) / width
+                    h = (y2 - y1) / height
+                    f.write(f"{class_id} {x_center:.6f} {y_center:.6f} {w:.6f} {h:.6f}\n")
 
+            # Copiar imagen a la carpeta de salida
+            image.save(os.path.join(args.output_dir, "images", os.path.basename(img_path)))
+
+        except Exception as e:
+            print(f"\nError inesperado procesando {img_path}: {e}")
+            errores += 1
+            continue
+
+    print(f"Procesamiento completado. {len(image_files) - errores} imágenes procesadas correctamente, {errores} errores.")
     print("Dataset sintético generado en:", args.output_dir)
 
 if __name__ == "__main__":
