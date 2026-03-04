@@ -1,0 +1,13 @@
+torch
+torchvision
+transformers
+pillow
+opencv-python
+matplotlib
+gradio
+ultralytics
+supervision
+roboflow
+autodistill
+autodistill-transformers
+autodistill-yolov8

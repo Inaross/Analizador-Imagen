@@ -135,13 +135,17 @@ def detectar_objetos(ruta_imagen, candidatos, umbral=0.1):
 if __name__ == "__main__":
     # --- Configuración de ejemplo ---
     # Cambia esta ruta por la de tu imagen
+<<<<<<< HEAD:codigo/modelo.py
     IMAGEN_PRUEBA = "C:\\Users\\aleja\\Documents\\Analizador-Imagen\\imagenes\\mochila.jpg"
+=======
+    IMAGEN_PRUEBA = r"C:\\Users\\Vespertino\\Documents\\Analizador-Imagen\\imagenes\\mochila2.jpg"
+>>>>>>> 56cb3a6c29b6723a65bed673762d9c15e9010679:src/modelo.py
 
     # Lista de objetos que queremos detectar (puedes modificarla)
     OBJETOS_BUSCAR = ["un gato", "un perro", "una persona", "un coche", "una mochila", "Luffy", "Zoro", "Nami", "Usopp", "Sanji", "Chopper", "Robin", "Franky", "Brook"]
 
     # Umbral de confianza (ajústalo según necesites)
-    UMBRAL = 0.1
+    UMBRAL = 0.2
 
     # Llamar a la función principal
     try:
