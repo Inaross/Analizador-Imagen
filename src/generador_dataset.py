@@ -1,14 +1,9 @@
-"""
-Genera un dataset sintético usando OWLv2 para etiquetar imágenes de One Piece.
-Las anotaciones se guardan en formato YOLO (txt por imagen).
-"""
-
 import os
-import torch
 from PIL import Image
 from transformers import Owlv2Processor, Owlv2ForObjectDetection
 from tqdm import tqdm
 import argparse
+import torch
 
 def main():
     parser = argparse.ArgumentParser()
@@ -20,11 +15,12 @@ def main():
         "Zoro with green hair and swords",
         "Sanji with blonde hair and curly eyebrow",
         "Nami with orange hair",
-        "Usopp with long nose"
+        "Usopp with long nose",
+        "Chopper small reindeer with hat",
+        "Robin with black hair and archeologist"
     ])
     args = parser.parse_args()
 
-    # Cargar modelo OWLv2
     processor = Owlv2Processor.from_pretrained("google/owlv2-base-patch16-ensemble")
     model = Owlv2ForObjectDetection.from_pretrained("google/owlv2-base-patch16-ensemble")
 
@@ -32,18 +28,24 @@ def main():
     os.makedirs(os.path.join(args.output_dir, "images"), exist_ok=True)
     os.makedirs(os.path.join(args.output_dir, "labels"), exist_ok=True)
 
-    # Mapeo de prompts a IDs de clase (para YOLO)
-    class_names = [p.split()[0] for p in args.prompts]  # Toma la primera palabra como clase
-    class_to_id = {name: i for i, name in enumerate(class_names)}
+    # Obtener todas las imágenes recursivamente
+    image_extensions = ('.jpg', '.jpeg', '.png')
+    image_files = []
+    for root, dirs, files in os.walk(args.input_dir):
+        for file in files:
+            if file.lower().endswith(image_extensions):
+                image_files.append(os.path.join(root, file))
 
-    # Procesar cada imagen
-    image_files = [f for f in os.listdir(args.input_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
-    for img_file in tqdm(image_files, desc="Procesando imágenes"):
-        img_path = os.path.join(args.input_dir, img_file)
+    print(f"Se encontraron {len(image_files)} imágenes en total.")
+
+    for img_path in tqdm(image_files, desc="Procesando imágenes"):
+        # Nombre base sin extensión
+        base_name = os.path.splitext(os.path.basename(img_path))[0]
+        # Abrir imagen
         image = Image.open(img_path).convert("RGB")
         width, height = image.size
 
-        # Inferencia con OWLv2
+        # Inferencia
         inputs = processor(text=args.prompts, images=image, return_tensors="pt")
         with torch.no_grad():
             outputs = model(**inputs)
@@ -53,13 +55,11 @@ def main():
             outputs=outputs, target_sizes=target_sizes, threshold=args.threshold
         )[0]
 
-        # Crear archivo de etiquetas en formato YOLO
-        label_file = os.path.join(args.output_dir, "labels", img_file.replace('.jpg', '.txt').replace('.png', '.txt'))
+        # Guardar etiquetas en formato YOLO
+        label_file = os.path.join(args.output_dir, "labels", base_name + ".txt")
         with open(label_file, 'w') as f:
             for box, score, label_id in zip(results["boxes"], results["scores"], results["labels"]):
-                # label_id corresponde al índice del prompt
                 class_id = label_id.item()
-                # Convertir box de [x1,y1,x2,y2] a [x_center, y_center, width, height] normalizado
                 x1, y1, x2, y2 = box.tolist()
                 x_center = (x1 + x2) / 2 / width
                 y_center = (y1 + y2) / 2 / height
@@ -68,7 +68,7 @@ def main():
                 f.write(f"{class_id} {x_center:.6f} {y_center:.6f} {w:.6f} {h:.6f}\n")
 
         # Copiar imagen a la carpeta de salida
-        image.save(os.path.join(args.output_dir, "images", img_file))
+        image.save(os.path.join(args.output_dir, "images", os.path.basename(img_path)))
 
     print("Dataset sintético generado en:", args.output_dir)
 
