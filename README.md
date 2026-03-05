@@ -99,16 +99,97 @@ royecto-one-piece/
 
 ## ⚙️ Requisitos Previos
 
-- **Sistema operativo:** Windows 10/11 (también debería funcionar en Linux/Mac con pequeños ajustes).
-- **Python:** Versión 3.12 o 3.14 (recomendada). [Descargar Python](https://www.python.org/downloads/)
-- **Git:** Para clonar el repositorio. [Descargar Git](https://git-scm.com/downloads)
-- **Espacio en disco:** Al menos 5 GB libres (modelos + dataset).
-
----
+* **Sistema operativo:** Windows 10/11 (también debería funcionar en Linux/Mac con pequeños ajustes).
+* **Python:** Versión 3.12 o 3.14 (recomendada). [Descargar Python](https://www.python.org/downloads/)
+* **Git:** Para clonar el repositorio. [Descargar Git](https://git-scm.com/downloads)
+* **Espacio en disco:** Al menos 5 GB libres (modelos + dataset).
 
 ## 🚀 Instalación y Ejecución
 
 ### 1. Clonar el repositorio
+
 ```bash
-git clone https://github.com/tuusuario/proyecto-one-piece.git
-cd proyecto-one-piece
+git clone https://github.com/Inaross/Analizador-Imagen.git
+cd Analizador-Imagen```
+
+2. Instalar dependencias
+Es altamente recomendable utilizar un entorno virtual para evitar conflictos entre librerías.
+
+Bash
+# Crear entorno virtual
+python -m venv venv
+
+# Activar el entorno (En Windows)
+venv\Scripts\activate
+
+# Activar el entorno (En Linux / macOS)
+# source venv/bin/activate
+
+# Instalar los paquetes requeridos
+pip install -r requirements.txt
+
+### 3. (Opcional) Generar dataset sintético
+
+Si deseas generar las anotaciones desde las imágenes en `data/raw` utilizando OWLv2:
+
+```bash
+python src/generador_dataset.py
+```
+
+*Nota: Este proceso puede tardar dependiendo de tu procesador y cantidad de imágenes.*
+
+### 4. Entrenar el modelo
+
+Para realizar el fine-tuning de YOLOv8 con el dataset sintético recién creado:
+
+```bash
+python src/train_yolo.py
+```
+
+Al finalizar, el modelo se guardará automáticamente en `models/yolo_one_piece/best.pt`.
+
+### 5. Lanzar la aplicación
+
+Una vez entrenado (o si ya dispones del archivo `best.pt`), arranca la interfaz web:
+
+```bash
+python src/app.py
+```
+
+## 🖥️ Uso de la Aplicación
+
+1. **Abre la interfaz** web en tu navegador.
+2. **Sube una imagen** arrastrándola al panel de entrada o haciendo clic para buscar en tu equipo.
+3. **Ajusta el umbral de confianza** *(Confidence Threshold)* si lo deseas mediante el deslizador para ser más o menos estricto con las detecciones.
+4. Haz clic en **"Detectar"** y visualiza los resultados en el panel derecho con sus respectivas cajas delimitadoras y etiquetas.
+
+## 📊 Resultados y Autoevaluación
+
+* **Precisión Zero-Shot (OWLv2):** Logra un gran rendimiento inicial con descripciones detalladas, facilitando la creación del *ground truth*.
+* **Rendimiento YOLOv8:** El fine-tuning permite pasar de tiempos de inferencia altos (OWLv2) a detecciones en tiempo real (~20-50ms por imagen) manteniendo una alta precisión en las clases objetivo.
+
+## 🚀 Mejoras Futuras
+
+* **Ampliar el Dataset:** Incluir personajes secundarios y antagonistas.
+* **Aumento de Datos (Data Augmentation):** Aplicar rotaciones, cambios de brillo y ruido para hacer el modelo más robusto.
+* **Despliegue en la Nube:** Alojar la aplicación en plataformas como Hugging Face Spaces para acceso público permanente.
+
+## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas para mejorar este proyecto. Los pasos son sencillos:
+
+1. Haz un **Fork** del repositorio.
+2. Crea tu rama para la nueva característica (`git checkout -b feature/NuevaCaracteristica`).
+3. Haz **Commit** de tus cambios (`git commit -m "Añadir nueva característica"`).
+4. Haz **Push** a la rama (`git push origin feature/NuevaCaracteristica`).
+5. Abre un **Pull Request**.
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia **MIT**. Para más detalles, consulta el archivo `LICENSE` incluido en el repositorio.
+
+## 📚 Referencias
+
+* [Ultralytics YOLOv8 Documentation](https://docs.ultralytics.com/)
+* [OWLv2: Scaling Open-Vocabulary Object Detection](https://huggingface.co/docs/transformers/model_doc/owlv2)
+* [Gradio Documentation](https://gradio.app/docs/)
