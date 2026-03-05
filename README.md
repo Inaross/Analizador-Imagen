@@ -110,27 +110,17 @@ royecto-one-piece/
 
 ```bash
 git clone https://github.com/Inaross/Analizador-Imagen.git
-cd Analizador-Imagen```
+cd Analizador-Imagen
+```
 
-2. Instalar dependencias
-Es altamente recomendable utilizar un entorno virtual para evitar conflictos entre librerías.
-
-Bash
-# Crear entorno virtual
-python -m venv venv
-
-# Activar el entorno (En Windows)
-venv\Scripts\activate
-
-# Activar el entorno (En Linux / macOS)
-# source venv/bin/activate
-
-# Instalar los paquetes requeridos
+### 2. Instalar dependencias
+Instalar los paquetes requeridos
+```bash
 pip install -r requirements.txt
+```
 
 ### 3. (Opcional) Generar dataset sintético
-
-Si deseas generar las anotaciones desde las imágenes en `data/raw` utilizando OWLv2:
+ Si deseas generar las anotaciones desde las imágenes en `data/raw` utilizando OWLv2:
 
 ```bash
 python src/generador_dataset.py
