@@ -72,7 +72,7 @@ Todo el proceso es **reproducible** y está documentado para que cualquier usuar
 ---
 
 ## 📁 Estructura del Proyecto
-royecto-one-piece/
+Proyecto-one-piece/
 │
 ├── data/
 │ ├── raw/ # Imágenes originales (organizadas por personaje)
