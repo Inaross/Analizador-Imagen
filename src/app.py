@@ -10,14 +10,14 @@ from PIL import Image
 import os
 
 # Cargar modelo entrenado (ajusta la ruta)
-model_path = "./models/yolo_one_piece/best.pt"
+model_path = "C:\\Users\\aleja\\Documents\\Analizador-Imagen\\runs\\detect\\models\\yolo_one_piece\\exp\\weights\\best.pt"
 if not os.path.exists(model_path):
     raise FileNotFoundError(f"No se encontró el modelo en {model_path}. Entrena primero con train_yolo.py")
 
 model = YOLO(model_path)
 
 # Nombres de clases (debe coincidir con el entrenamiento)
-class_names = ['Luffy', 'Zoro', 'Sanji', 'Nami', 'Usopp']
+class_names = ['Luffy', 'Zoro', 'Sanji', 'Nami', 'Usopp', 'Chopper', 'Robin']
 
 def detect_objects(image, conf_threshold=0.25):
     # Ejecutar inferencia
@@ -46,7 +46,7 @@ def detect_objects(image, conf_threshold=0.25):
 # Interfaz Gradio
 with gr.Blocks(title="Detector de Personajes de One Piece") as demo:
     gr.Markdown("# 🏴‍☠️ Detector de Personajes de One Piece")
-    gr.Markdown("Sube una imagen y el modelo detectará Luffy, Zoro, Sanji, Nami y Usopp.")
+    gr.Markdown("Sube una imagen y el modelo detectará a Luffy, Zoro, Sanji, Nami, Usopp, Chopper y Robin.")
     
     with gr.Row():
         with gr.Column():
@@ -61,7 +61,7 @@ with gr.Blocks(title="Detector de Personajes de One Piece") as demo:
     btn.click(fn=detect_objects, inputs=[image_input, threshold], outputs=[image_output, text_output])
     
     gr.Examples(
-        examples=[["data/raw/ejemplo1.jpg"], ["data/raw/ejemplo2.jpg"]],
+        examples=[["C:\\Users\\aleja\\Documents\\Analizador-Imagen\\data\\raw\\Luffy\\mw_file_0.png"], ["C:\\Users\\aleja\\Documents\\Analizador-Imagen\\data\\raw\\Luffy\\mw_file_1.png"]],
         inputs=image_input,
         outputs=[image_output, text_output],
         fn=detect_objects,

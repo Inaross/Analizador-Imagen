@@ -19,17 +19,17 @@ def main():
     # Crear archivo data.yaml para YOLO
     data_yaml = {
         'path': os.path.abspath(args.data_dir),
-        'train': 'images',  # YOLO espera que images y labels estén en la misma carpeta
+        'train': 'images',  
         'val': 'images',
-        'nc': 5,  # Número de clases (ajusta según tus prompts)
-        'names': ['Luffy', 'Zoro', 'Sanji', 'Nami', 'Usopp']  # Nombres de clases
+        'nc': 7,  # Actualizado a 7 clases
+        'names': ['Luffy', 'Zoro', 'Sanji', 'Nami', 'Usopp', 'Chopper', 'Robin']  # Orden exacto del generador
     }
     yaml_path = os.path.join(args.data_dir, 'data.yaml')
     with open(yaml_path, 'w') as f:
         yaml.dump(data_yaml, f)
 
-    # Cargar modelo pre-entrenado YOLOv8n
-    model = YOLO('yolov8n.pt')
+    # Cargar modelo pre-entrenado YOLOv8s
+    model = YOLO('yolov8s.pt')
 
     # Entrenar
     model.train(
