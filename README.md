@@ -72,28 +72,31 @@ Todo el proceso es **reproducible** y está documentado para que cualquier usuar
 ---
 
 ## 📁 Estructura del Proyecto
+
+```text
 Proyecto-one-piece/
 │
 ├── data/
-│ ├── raw/ # Imágenes originales (organizadas por personaje)
-│ └── synthetic/ # Dataset generado automáticamente
-│ ├── images/ # Copia de las imágenes
-│ └── labels/ # Anotaciones en formato YOLO (.txt)
+│   ├── raw/            # Imágenes originales (organizadas por personaje)
+│   └── synthetic/      # Dataset generado automáticamente
+│       ├── images/     # Copia de las imágenes
+│       └── labels/     # Anotaciones en formato YOLO (.txt)
 │
 ├── src/
-│ ├── generador_dataset.py # Script para generar dataset con OWLv2
-│ ├── train_yolo.py # Entrenamiento de YOLOv8
-│ ├── app.py # Aplicación Gradio
-│ └── utils.py # (Opcional) Utilidades varias
+│   ├── generador_dataset.py # Script para generar dataset con OWLv2
+│   ├── train_yolo.py        # Entrenamiento de YOLOv8
+│   ├── app.py               # Aplicación Gradio
+│   └── utils.py             # (Opcional) Utilidades varias
 │
 ├── models/
-│ └── yolo_one_piece/ # Modelo entrenado
-│ └── best.pt # Pesos del mejor modelo
+│   └── yolo_one_piece/ # Modelo entrenado
+│       └── best.pt     # Pesos del mejor modelo
 │
-├── examples/ # Imágenes de ejemplo para el README
-├── requirements.txt # Dependencias del proyecto
-├── README.md # Este archivo
-└── .gitignore # Archivos a ignorar en git
+├── examples/           # Imágenes de ejemplo para el README
+├── requirements.txt    # Dependencias del proyecto
+├── README.md           # Este archivo
+└── .gitignore          # Archivos a ignorar en git
+```
 
 ---
 
