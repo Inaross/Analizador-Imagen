@@ -6,3 +6,6 @@ opencv-python
 matplotlib
 gradio
 ultralytics
+pyyaml
+numpy
+tqdm

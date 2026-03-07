@@ -1,6 +1,6 @@
 import os
 from PIL import Image
-from transformers import Owlv2Processor, Owlv2ForObjectDetection
+from transformers import Owlv2Processor, Owlv2ForObjectDetection 
 from tqdm import tqdm
 import argparse
 import torch
@@ -9,15 +9,15 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_dir", type=str, default="./data/raw")
     parser.add_argument("--output_dir", type=str, default="./data/synthetic")
-    parser.add_argument("--threshold", type=float, default=0.1)
+    parser.add_argument("--threshold", type=float, default=0.35)
     parser.add_argument("--prompts", type=str, nargs="+", default=[
-        "Luffy with straw hat",
-        "Zoro with green hair and swords",
-        "Sanji with blonde hair and curly eyebrow",
-        "Nami with orange hair",
-        "Usopp with long nose",
-        "Chopper small reindeer with hat",
-        "Robin with black hair and archeologist"
+        "Luffy face character straw hat",
+        "Zoro face character green hair",
+        "Sanji face character blonde hair",
+        "Nami face character orange hair",
+        "Usopp face character long nose",
+        "Chopper face character small reindeer",
+        "Robin face character black hair"
     ])
     args = parser.parse_args()
 

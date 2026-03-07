@@ -10,7 +10,7 @@ from PIL import Image
 import os
 
 # Cargar modelo entrenado (ajusta la ruta)
-model_path = "C:\\Users\\aleja\\Documents\\Analizador-Imagen\\runs\\detect\\models\\yolo_one_piece\\exp\\weights\\best.pt"
+model_path = "C:/Users/Usuario/Documents/Analizador-Imagen/Analizador-Imagen/runs/detect/models/yolo_one_piece/exp/weights/best.pt"
 if not os.path.exists(model_path):
     raise FileNotFoundError(f"No se encontró el modelo en {model_path}. Entrena primero con train_yolo.py")
 
