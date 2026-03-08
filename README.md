@@ -1,58 +1,23 @@
 # 🏴‍☠️ One Piece Character Detector
 
 ![Python](https://img.shields.io/badge/Python-3.12%2B-blue)
-![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-OWLv2-yellow)
 ![Ultralytics](https://img.shields.io/badge/Ultralytics-YOLOv8-green)
+![Roboflow](https://img.shields.io/badge/Dataset-Roboflow-purple)
 ![Gradio](https://img.shields.io/badge/Gradio-Interface-orange)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-**Detección automática de personajes del anime One Piece usando OWLv2 + YOLO26**  
-Proyecto académico para la asignatura de IA, donde se especializa un modelo de detección de objetos en un dominio concreto mediante generación automática de dataset y fine-tuning de YOLO.
-
----
-
-## Tabla de Contenidos
-
-- [Descripción](#-descripción)
-- [Características](#-características)
-- [Tecnologías Utilizadas](#-tecnologías-utilizadas)
-- [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Requisitos Previos](#-requisitos-previos)
-- [Instalación y Ejecución](#-instalación-y-ejecución)
-  - [1. Clonar el repositorio](#1-clonar-el-repositorio)
-  - [2. Instalar dependencias](#2-instalar-dependencias)
-  - [3. (Opcional) Generar dataset sintético](#3-opcional-generar-dataset-sintético)
-  - [4. Entrenar el modelo](#4-entrenar-el-modelo)
-  - [5. Lanzar la aplicación](#5-lanzar-la-aplicación)
-- [Uso de la Aplicación](#-uso-de-la-aplicación)
-- [Ejemplos](#-ejemplos)
-- [Resultados y Autoevaluación](#-resultados-y-autoevaluación)
-- [Mejoras Futuras](#-mejoras-futuras)
-- [Contribuciones](#-contribuciones)
-- [Licencia](#-licencia)
-- [Referencias](#-referencias)
-
----
-
-## Descripción
-
-Este proyecto permite **detectar hasta 9 personajes principales** de One Piece (Luffy, Zoro, Sanji, Nami, Usopp, Chopper, Robin, Franky y Brook) en imágenes. Se compone de dos fases:
-
-1. **Generación automática de anotaciones** usando el modelo zero-shot **OWLv2** de Google. A partir de prompts textuales (ej. *"Luffy with straw hat"*), OWLv2 localiza los personajes en las imágenes crudas descargadas de internet y crea archivos de etiquetas en formato YOLO.
-2. **Fine-tuning de YOLO26** con esas anotaciones, obteniendo un detector rápido y super ligero especializado que puede ejecutarse localmente incluso en CPU.
-
-Todo el proceso es **reproducible** y está documentado para que cualquier usuario pueda replicarlo fácilmente.
+**Detección automática de los 9 personajes principales de One Piece usando YOLOv8 entrenado con un dataset curado de Roboflow.**  
+Proyecto académico para la asignatura de IA, donde se especializa un modelo de detección de objetos en el dominio del anime.
 
 ---
 
 ## Características
 
-- ✅ Detección de 9 personajes clave de la tripulación de los Sombrero de Paja en imágenes.
-- ✅ Interfaz gráfica amigable con **Gradio**.
-- ✅ Modelo entrenado localmente (sin necesidad de GPU potente).
-- ✅ Generación de dataset automática con OWLv2 (ahorra horas de anotación manual).
-- ✅ Código modular y bien comentado.
-- ✅ Compatible con Windows (probado en Python 3.12/3.14).
+- ✅ Detecta los 9 personajes de la tripulación de los Sombrero de Paja (Luffy, Zoro, Sanji, Nami, Usopp, Chopper, Robin, Franky y Brook).
+- ✅ Interfaz web local con **Gradio**.
+- ✅ Dataset anotado a mano descargado desde **Roboflow**.
+- ✅ Modelo **YOLOv8 Nano** — rápido y ligero, ejecutable en CPU.
+- ✅ Compatible con Windows (probado en Python 3.12).
 
 ---
 
@@ -61,54 +26,32 @@ Todo el proceso es **reproducible** y está documentado para que cualquier usuar
 | Tecnología | Propósito |
 |------------|-----------|
 | [Python 3.12+](https://www.python.org/) | Lenguaje base |
-| [Hugging Face Transformers](https://huggingface.co/docs/transformers/index) | Carga de OWLv2 y procesamiento |
-| [OWLv2](https://huggingface.co/google/owlv2-base-patch16-ensemble) | Modelo zero-shot para generar anotaciones |
-| [Ultralytics YOLO](https://docs.ultralytics.com/) | Modelo de detección fine-tuneado (YOLO26 Nano) |
+| [Ultralytics YOLOv8](https://docs.ultralytics.com/) | Modelo de detección fine-tuneado |
+| [Roboflow](https://roboflow.com/) | Dataset anotado `one-piece-uuyxt` |
 | [Gradio](https://gradio.app/) | Interfaz de usuario interactiva |
-| [Pillow](https://python-pillow.org/) | Manipulación de imágenes |
 | [OpenCV](https://opencv.org/) | Dibujo de bounding boxes |
-| [tqdm](https://tqdm.github.io/) | Barras de progreso |
 
 ---
 
 ## Estructura del Proyecto
 
 ```text
-Proyecto-one-piece/
-│
-├── data/
-│   ├── raw/            # Imágenes originales (organizadas por personaje)
-│   └── synthetic/      # Dataset generado automáticamente
-│       ├── images/     # Copia de las imágenes
-│       └── labels/     # Anotaciones en formato YOLO (.txt)
+Analizador-Imagen/
 │
 ├── src/
-│   ├── descargar_magico.py  # Script para descargar imágenes de DuckDuckGo/Bing
-│   ├── limpiar_exceso.py    # Script utilitario para balancear el dataset a un máximo de imágenes
-│   ├── limpieza_imagenes.py # Script para eliminar imágenes corruptas post-descarga
-│   ├── generador_dataset.py # Script para generar dataset con OWLv2
-│   ├── train_yolo.py        # Entrenamiento de YOLO26
-│   ├── app.py               # Aplicación Gradio
-│   └── utils.py             # (Opcional) Utilidades varias
+│   ├── app.py                  # Aplicación Gradio (interfaz web)
+│   ├── train_yolo.py           # Fine-tuning de YOLOv8
+│   └── descargar_roboflow.py   # Descarga el dataset desde Roboflow
 │
-├── models/
-│   └── yolo_one_piece/ # Modelo entrenado
-│       └── best.pt     # Pesos del mejor modelo
+├── ONE-PIECE-1/                # Dataset de Roboflow (excluido del repo)
 │
-├── examples/           # Imágenes de ejemplo para el README
-├── requirements.txt    # Dependencias del proyecto
-├── README.md           # Este archivo
-└── .gitignore          # Archivos a ignorar en git
+├── runs/detect/                # Pesos del modelo entrenado (best.pt)
+│
+├── requirements.txt
+└── README.md
 ```
 
 ---
-
-## Requisitos Previos
-
-* **Sistema operativo:** Windows 10/11 (también debería funcionar en Linux/Mac con pequeños ajustes).
-* **Python:** Versión 3.12 o 3.14 (recomendada). [Descargar Python](https://www.python.org/downloads/)
-* **Git:** Para clonar el repositorio. [Descargar Git](https://git-scm.com/downloads)
-* **Espacio en disco:** Al menos 5 GB libres (modelos + dataset).
 
 ## Instalación y Ejecución
 
@@ -120,72 +63,53 @@ cd Analizador-Imagen
 ```
 
 ### 2. Instalar dependencias
-Instalar los paquetes requeridos
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. (Opcional) Preparar dataset
-Dispones de scripts automatizados para crear tu propio dataset desde cero sin anotarlo a mano:
-```bash
-python src/descargar_magico.py
-python src/limpiar_exceso.py
-python src/limpieza_imagenes.py
-python src/generador_dataset.py
-```
+### 3. (Opcional) Descargar el dataset y reentrenar
 
-### 4. Entrenar el modelo
-
-Para realizar el fine-tuning de YOLO con el dataset sintético recién creado:
+Si quieres reentrenar el modelo desde cero:
 
 ```bash
-python src/train_yolo.py
+python src/descargar_roboflow.py   # Descarga el dataset de Roboflow
+python src/train_yolo.py           # Entrena YOLOv8 (50 épocas por defecto)
 ```
 
-Al finalizar, el modelo se guardará en `models/yolo_one_piece/best.pt`.
-
-### 5. Lanzar la aplicación
-
-Una vez entrenado (o si ya dispones del archivo `best.pt`), arranca la interfaz web:
+### 4. Lanzar la aplicación
 
 ```bash
 python src/app.py
 ```
 
+Abre `http://127.0.0.1:7860` en tu navegador.
+
+---
+
 ## Uso de la Aplicación
 
-1. **Abre la interfaz** web en tu navegador.
-2. **Sube una imagen** arrastrándola al panel de entrada o haciendo clic para buscar en tu equipo.
-3. **Ajusta el umbral de confianza** *(Confidence Threshold)* si lo deseas mediante el deslizador para ser más o menos estricto con las detecciones.
-4. Haz clic en **"Detectar"** y visualiza los resultados en el panel derecho con sus respectivas cajas delimitadoras y etiquetas.
+1. **Sube una imagen** arrastrándola al panel de entrada.
+2. **Ajusta el umbral de confianza** si lo deseas.
+3. Haz clic en **"Detectar"** para ver los resultados con cajas delimitadoras y nombres.
 
-## Resultados y Autoevaluación
+---
 
-* **Precisión Zero-Shot (OWLv2):** Logra un gran rendimiento inicial con descripciones detalladas, facilitando la creación del *ground truth*.
-* **Rendimiento YOLOv8:** El fine-tuning permite pasar de tiempos de inferencia altos (OWLv2) a detecciones en tiempo real (~20-50ms por imagen) manteniendo una alta precisión en las clases objetivo.
+## Resultados
+
+El modelo YOLOv8 entrenado con el dataset de Roboflow alcanza alta precisión identificando los personajes incluso en imágenes de grupo, con tiempos de inferencia de ~10-30ms por imagen.
+
+---
 
 ## Mejoras Futuras
 
-* **Ampliar el Dataset:** Incluir personajes secundarios y antagonistas.
-* **Aumento de Datos (Data Augmentation):** Aplicar rotaciones, cambios de brillo y ruido para hacer el modelo más robusto.
-* **Despliegue en la Nube:** Alojar la aplicación en plataformas como Hugging Face Spaces para acceso público permanente.
+- Ampliar el dataset con personajes secundarios y antagonistas.
+- Desplegar la aplicación en Hugging Face Spaces para acceso público.
 
-## Contribuciones
-
-Las contribuciones son bienvenidas para mejorar este proyecto. Los pasos son sencillos:
-
-1. Haz un **Fork** del repositorio.
-2. Crea tu rama para la nueva característica (`git checkout -b feature/NuevaCaracteristica`).
-3. Haz **Commit** de tus cambios (`git commit -m "Añadir nueva característica"`).
-4. Haz **Push** a la rama (`git push origin feature/NuevaCaracteristica`).
-5. Abre un **Pull Request**.
-
-## Licencia
-
-Este proyecto está bajo la Licencia **MIT**. Para más detalles, consulta el archivo `LICENSE` incluido en el repositorio.
+---
 
 ## Referencias
 
-* [Ultralytics YOLOv8 Documentation](https://docs.ultralytics.com/)
-* [OWLv2: Scaling Open-Vocabulary Object Detection](https://huggingface.co/docs/transformers/model_doc/owlv2)
-* [Gradio Documentation](https://gradio.app/docs/)
+- [Ultralytics YOLOv8 Documentation](https://docs.ultralytics.com/)
+- [Roboflow Universe - One Piece Dataset](https://universe.roboflow.com/aivle5-f7j14/one-piece-uuyxt)
+- [Gradio Documentation](https://gradio.app/docs/)
