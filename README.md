@@ -6,12 +6,12 @@
 ![Gradio](https://img.shields.io/badge/Gradio-Interface-orange)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-**Detección automática de personajes del anime One Piece usando OWLv2 + YOLOv8**  
-Proyecto académico para la asignatura de IA, donde se especializa un modelo de detección de objetos en un dominio concreto mediante generación de dataset sintético y fine-tuning.
+**Detección automática de personajes del anime One Piece usando OWLv2 + YOLO26**  
+Proyecto académico para la asignatura de IA, donde se especializa un modelo de detección de objetos en un dominio concreto mediante generación automática de dataset y fine-tuning de YOLO.
 
 ---
 
-## 📖 Tabla de Contenidos
+## Tabla de Contenidos
 
 - [Descripción](#-descripción)
 - [Características](#-características)
@@ -34,20 +34,20 @@ Proyecto académico para la asignatura de IA, donde se especializa un modelo de 
 
 ---
 
-## 🧠 Descripción
+## Descripción
 
-Este proyecto permite **detectar hasta 7 personajes principales** de One Piece (Luffy, Zoro, Sanji, Nami, Usopp, Chopper, Robin) en imágenes. Se compone de dos fases:
+Este proyecto permite **detectar hasta 9 personajes principales** de One Piece (Luffy, Zoro, Sanji, Nami, Usopp, Chopper, Robin, Franky y Brook) en imágenes. Se compone de dos fases:
 
-1. **Generación automática de anotaciones** usando el modelo zero-shot **OWLv2** de Google. A partir de prompts textuales (ej. *"Luffy with straw hat"*), OWLv2 localiza los personajes en las imágenes y crea archivos de etiquetas en formato YOLO.
-2. **Fine-tuning de YOLOv8** con esas anotaciones, obteniendo un detector rápido y especializado que puede ejecutarse localmente incluso en CPU.
+1. **Generación automática de anotaciones** usando el modelo zero-shot **OWLv2** de Google. A partir de prompts textuales (ej. *"Luffy with straw hat"*), OWLv2 localiza los personajes en las imágenes crudas descargadas de internet y crea archivos de etiquetas en formato YOLO.
+2. **Fine-tuning de YOLO26** con esas anotaciones, obteniendo un detector rápido y super ligero especializado que puede ejecutarse localmente incluso en CPU.
 
 Todo el proceso es **reproducible** y está documentado para que cualquier usuario pueda replicarlo fácilmente.
 
 ---
 
-## ✨ Características
+## Características
 
-- ✅ Detección de 7 personajes de One Piece en imágenes.
+- ✅ Detección de 9 personajes clave de la tripulación de los Sombrero de Paja en imágenes.
 - ✅ Interfaz gráfica amigable con **Gradio**.
 - ✅ Modelo entrenado localmente (sin necesidad de GPU potente).
 - ✅ Generación de dataset automática con OWLv2 (ahorra horas de anotación manual).
@@ -56,14 +56,14 @@ Todo el proceso es **reproducible** y está documentado para que cualquier usuar
 
 ---
 
-## 🛠 Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 | Tecnología | Propósito |
 |------------|-----------|
 | [Python 3.12+](https://www.python.org/) | Lenguaje base |
 | [Hugging Face Transformers](https://huggingface.co/docs/transformers/index) | Carga de OWLv2 y procesamiento |
 | [OWLv2](https://huggingface.co/google/owlv2-base-patch16-ensemble) | Modelo zero-shot para generar anotaciones |
-| [Ultralytics YOLOv8](https://docs.ultralytics.com/) | Modelo de detección fine-tuneado |
+| [Ultralytics YOLO](https://docs.ultralytics.com/) | Modelo de detección fine-tuneado (YOLO26 Nano) |
 | [Gradio](https://gradio.app/) | Interfaz de usuario interactiva |
 | [Pillow](https://python-pillow.org/) | Manipulación de imágenes |
 | [OpenCV](https://opencv.org/) | Dibujo de bounding boxes |
@@ -71,7 +71,7 @@ Todo el proceso es **reproducible** y está documentado para que cualquier usuar
 
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```text
 Proyecto-one-piece/
@@ -83,8 +83,11 @@ Proyecto-one-piece/
 │       └── labels/     # Anotaciones en formato YOLO (.txt)
 │
 ├── src/
+│   ├── descargar_magico.py  # Script para descargar imágenes de DuckDuckGo/Bing
+│   ├── limpiar_exceso.py    # Script utilitario para balancear el dataset a un máximo de imágenes
+│   ├── limpieza_imagenes.py # Script para eliminar imágenes corruptas post-descarga
 │   ├── generador_dataset.py # Script para generar dataset con OWLv2
-│   ├── train_yolo.py        # Entrenamiento de YOLOv8
+│   ├── train_yolo.py        # Entrenamiento de YOLO26
 │   ├── app.py               # Aplicación Gradio
 │   └── utils.py             # (Opcional) Utilidades varias
 │
@@ -100,14 +103,14 @@ Proyecto-one-piece/
 
 ---
 
-## ⚙️ Requisitos Previos
+## Requisitos Previos
 
 * **Sistema operativo:** Windows 10/11 (también debería funcionar en Linux/Mac con pequeños ajustes).
 * **Python:** Versión 3.12 o 3.14 (recomendada). [Descargar Python](https://www.python.org/downloads/)
 * **Git:** Para clonar el repositorio. [Descargar Git](https://git-scm.com/downloads)
 * **Espacio en disco:** Al menos 5 GB libres (modelos + dataset).
 
-## 🚀 Instalación y Ejecución
+## Instalación y Ejecución
 
 ### 1. Clonar el repositorio
 
@@ -122,24 +125,24 @@ Instalar los paquetes requeridos
 pip install -r requirements.txt
 ```
 
-### 3. (Opcional) Generar dataset sintético
- Si deseas generar las anotaciones desde las imágenes en `data/raw` utilizando OWLv2:
-
+### 3. (Opcional) Preparar dataset
+Dispones de scripts automatizados para crear tu propio dataset desde cero sin anotarlo a mano:
 ```bash
+python src/descargar_magico.py
+python src/limpiar_exceso.py
+python src/limpieza_imagenes.py
 python src/generador_dataset.py
 ```
 
-*Nota: Este proceso puede tardar dependiendo de tu procesador y cantidad de imágenes.*
-
 ### 4. Entrenar el modelo
 
-Para realizar el fine-tuning de YOLOv8 con el dataset sintético recién creado:
+Para realizar el fine-tuning de YOLO con el dataset sintético recién creado:
 
 ```bash
 python src/train_yolo.py
 ```
 
-Al finalizar, el modelo se guardará automáticamente en `models/yolo_one_piece/best.pt`.
+Al finalizar, el modelo se guardará en `models/yolo_one_piece/best.pt`.
 
 ### 5. Lanzar la aplicación
 
@@ -149,25 +152,25 @@ Una vez entrenado (o si ya dispones del archivo `best.pt`), arranca la interfaz 
 python src/app.py
 ```
 
-## 🖥️ Uso de la Aplicación
+## Uso de la Aplicación
 
 1. **Abre la interfaz** web en tu navegador.
 2. **Sube una imagen** arrastrándola al panel de entrada o haciendo clic para buscar en tu equipo.
 3. **Ajusta el umbral de confianza** *(Confidence Threshold)* si lo deseas mediante el deslizador para ser más o menos estricto con las detecciones.
 4. Haz clic en **"Detectar"** y visualiza los resultados en el panel derecho con sus respectivas cajas delimitadoras y etiquetas.
 
-## 📊 Resultados y Autoevaluación
+## Resultados y Autoevaluación
 
 * **Precisión Zero-Shot (OWLv2):** Logra un gran rendimiento inicial con descripciones detalladas, facilitando la creación del *ground truth*.
 * **Rendimiento YOLOv8:** El fine-tuning permite pasar de tiempos de inferencia altos (OWLv2) a detecciones en tiempo real (~20-50ms por imagen) manteniendo una alta precisión en las clases objetivo.
 
-## 🚀 Mejoras Futuras
+## Mejoras Futuras
 
 * **Ampliar el Dataset:** Incluir personajes secundarios y antagonistas.
 * **Aumento de Datos (Data Augmentation):** Aplicar rotaciones, cambios de brillo y ruido para hacer el modelo más robusto.
 * **Despliegue en la Nube:** Alojar la aplicación en plataformas como Hugging Face Spaces para acceso público permanente.
 
-## 🤝 Contribuciones
+## Contribuciones
 
 Las contribuciones son bienvenidas para mejorar este proyecto. Los pasos son sencillos:
 
@@ -177,11 +180,11 @@ Las contribuciones son bienvenidas para mejorar este proyecto. Los pasos son sen
 4. Haz **Push** a la rama (`git push origin feature/NuevaCaracteristica`).
 5. Abre un **Pull Request**.
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto está bajo la Licencia **MIT**. Para más detalles, consulta el archivo `LICENSE` incluido en el repositorio.
 
-## 📚 Referencias
+## Referencias
 
 * [Ultralytics YOLOv8 Documentation](https://docs.ultralytics.com/)
 * [OWLv2: Scaling Open-Vocabulary Object Detection](https://huggingface.co/docs/transformers/model_doc/owlv2)

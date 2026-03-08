@@ -19,24 +19,29 @@ def main():
     # Crear archivo data.yaml para YOLO
     data_yaml = {
         'path': os.path.abspath(args.data_dir),
-        'train': 'images',  
-        'val': 'images',
-        'nc': 7,  # Actualizado a 7 clases
-        'names': ['Luffy', 'Zoro', 'Sanji', 'Nami', 'Usopp', 'Chopper', 'Robin']  # Orden exacto del generador
+        'train': 'images/train',  
+        'val': 'images/val',
+        'nc': 9,  # Actualizado a 9 clases
+        'names': ['Luffy', 'Zoro', 'Sanji', 'Nami', 'Usopp', 'Chopper', 'Robin', 'Franky', 'Brook']  # Orden exacto del generador
     }
     yaml_path = os.path.join(args.data_dir, 'data.yaml')
     with open(yaml_path, 'w') as f:
         yaml.dump(data_yaml, f)
 
-    # Cargar modelo pre-entrenado YOLOv8s
-    model = YOLO('yolov8s.pt')
+    # Inicializar modelo de YOLOv8 Nano para entrenamiento rápido
+    model = YOLO('yolov8n.pt')
+
+    # Path absoluto al data.yaml descargado desde Roboflow (ONE-PIECE-1)
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    data_yaml_path = os.path.join(base_dir, 'ONE-PIECE-1', 'data.yaml')
 
     # Entrenar
     model.train(
-        data=yaml_path,
+        data=data_yaml_path,
         epochs=args.epochs,
         batch=args.batch,
         imgsz=args.imgsz,
+        patience=25,  # Añadimos paciencia para evitar overfitting prolongado
         project=args.output_dir,
         name='exp',
         exist_ok=True
