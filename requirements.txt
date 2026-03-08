@@ -1,11 +1,7 @@
-torch
-torchvision
-transformers
-pillow
-opencv-python
-matplotlib
-gradio
 ultralytics
-pyyaml
+gradio
+opencv-python
+pillow
 numpy
-tqdm
+roboflow
+pyyaml

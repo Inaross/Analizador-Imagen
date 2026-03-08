@@ -13,7 +13,7 @@ Proyecto académico para la asignatura de IA, donde se especializa un modelo de 
 
 ## Características
 
-- ✅ Detecta los 9 personajes de la tripulación de los Sombrero de Paja (Luffy, Zoro, Sanji, Nami, Usopp, Chopper, Robin, Franky y Brook).
+- ✅ Detecta los 9 personajes de la tripulación de los Mugiwaras (Luffy, Zoro, Sanji, Nami, Usopp, Chopper, Robin, Franky y Brook).
 - ✅ Interfaz web local con **Gradio**.
 - ✅ Dataset anotado a mano descargado desde **Roboflow**.
 - ✅ Modelo **YOLOv8 Nano** — rápido y ligero, ejecutable en CPU.
