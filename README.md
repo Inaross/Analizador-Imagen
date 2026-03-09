@@ -13,7 +13,7 @@ Alejandro Bueno Ortiz, Alexander Gavilanez Castro
 
 ---
 
-## 📖 Descripción
+## Descripción
 **¿Qué hace nuestra app?**  
 Esta aplicación es un detector de personajes de *One Piece* capaz de identificar automáticamente a los 9 miembros principales de la tripulación de los Sombrero de Paja (Luffy, Zoro, Sanji, Nami, Usopp, Chopper, Robin, Franky y Brook) en imágenes. Cuenta con una interfaz web local amigable construida en Gradio.
 
@@ -22,13 +22,13 @@ Resuelve el reto de identificar personajes específicos dentro del característi
 
 ---
 
-## 🤖 Modelo Base
+## Modelo Base
 **¿Qué modelo de Hugging Face elegisteis y por qué?**  
 Elegimos **YOLOv8 Nano** (`yolov8n.pt`) de Ultralytics (frecuentemente exportado y referenciado en el ecosistema de Hugging Face para visión). Elegimos YOLOv8 por su asombrosa velocidad de inferencia a tiempo real y su equilibrio perfecto entre precisión y rendimiento. La versión "Nano" es lo suficientemente ligera como para ser entrenada rápidamente y ejecutada en CPU, lo cual es ideal para una aplicación web interactiva.
 
 ---
 
-## ⚙️ Técnica de Adaptación: Fine-tuning
+## Técnica de Adaptación: Fine-tuning
 Para este proyecto utilizamos **Fine-tuning** (Ajuste Fino) en lugar de RAG (Retrieval-Augmented Generation).
 
 **¿Por qué elegimos Fine-tuning sobre RAG?**  
@@ -39,7 +39,7 @@ Tomamos el modelo YOLOv8 preentrenado (que ya sabe detectar formas básicas y ob
 
 ---
 
-## 📊 Dataset
+## Dataset
 **¿De dónde sacasteis los datos?**  
 El dataset fue obtenido de [Roboflow Universe](https://universe.roboflow.com/aivle5-f7j14/one-piece-uuyxt), una plataforma de visión artificial comunitaria. Utilizamos una versión específicamente anotada para YOLOv8.
 
@@ -51,7 +51,7 @@ El dataset fue obtenido de [Roboflow Universe](https://universe.roboflow.com/aiv
 
 ---
 
-## 🚀 Instrucciones de Instalación y Ejecución
+## Instrucciones de Instalación y Ejecución
 
 Sigue estos pasos desde clonar el repositorio hasta hacer la primera inferencia:
 
