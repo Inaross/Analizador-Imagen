@@ -1,0 +1,29 @@
+# Dataset de Roboflow (imágenes demasiado grandes para GitHub)
+ONE-PIECE-1/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Entornos virtuales
+.env
+.venv
+venv/
+env/
+
+# YOLO logs y caché
+runs/detect/**/weights/last.pt
+*.cache
+
+# VS Code
+.vscode/
+
+# Sistema
+.DS_Store
+Thumbs.db
