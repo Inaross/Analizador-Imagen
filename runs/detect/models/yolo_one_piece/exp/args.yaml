@@ -1,7 +1,7 @@
 task: detect
 mode: train
 model: yolov8n.pt
-data: C:\Users\Usuario\Documents\Analizador-Imagen\Analizador-Imagen\ONE-PIECE-1\data.yaml
+data: c:\Users\aleja\Documents\Analizador-Imagen\ONE-PIECE-1\data.yaml
 epochs: 50
 time: null
 patience: 25
@@ -106,4 +106,4 @@ auto_augment: randaugment
 erasing: 0.4
 cfg: null
 tracker: botsort.yaml
-save_dir: C:\Users\Usuario\Documents\Analizador-Imagen\Analizador-Imagen\runs\detect\models\yolo_one_piece\exp
+save_dir: C:\Users\aleja\Documents\Analizador-Imagen\runs\detect\models\yolo_one_piece\exp
